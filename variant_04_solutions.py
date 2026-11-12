@@ -24,8 +24,7 @@ def solve_bisection(func, a, b, eps):
     iteration = 0
     protocol = []
 
-    protocol.append(f"iteration {iteration}: a = {a}, b = {b}, c = {(a + b) / 2}, f(a) = {func(a)}, f(b) = {func(b)}, f(c) = {func((a + b) / 2)}")
-
+    protocol.append((iteration, a, b, (a + b) / 2.0, func((a + b) / 2.0)))
     while (b - a) > 2 * eps:
         iteration += 1
         c = (a + b) / 2
@@ -35,6 +34,27 @@ def solve_bisection(func, a, b, eps):
             b = c
         else:
             a = c
-        protocol.append(f"iteration {iteration}: a = {a}, b = {b}, c = {c}, f(a) = {func(a)}, f(b) = {func(b)}, f(c) = {func(c)}")
+        protocol.append((iteration, a, b, c, func(c)))
     root = (a + b) / 2
     return root, iteration, protocol  
+
+def save_results_to_file(filename, root, iterations, protocol):
+    """
+    Зберігає підсумковий корінь та відформатовану таблицю ітерацій у текстовий файл.
+    """
+    with open(filename, 'w+') as f:
+       
+        f.write("Protocol for the bisection method\n")
+        f.write(f"Found root: x = {root:.6f}\n")
+        f.write(f"Number of iterations: {iterations}\n")
+        
+        # Table header
+        f.write(f"{'Iteration':<10} | {'a':<12} | {'b':<12} | {'c (midpoint)':<12} | {'f(c)':<15}\n")
+        
+        # Table rows
+        for item in protocol:
+            it, a_val, b_val, c_val, fc_val = item
+            f.write(f"{it:<10} | {a_val:<12.6f} | {b_val:<12.6f} | {c_val:<12.6f} | {fc_val:<15.2e}\n")
+        
+    print(f"Results saved to file: {filename}")
+
