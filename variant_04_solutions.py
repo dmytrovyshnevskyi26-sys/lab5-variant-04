@@ -6,6 +6,7 @@
 EIP30
 """
 import math
+import os
 def target_function(x):
     """
     Цільова функція
@@ -16,11 +17,13 @@ def target_function(x):
 def solve_bisection(func, a, b, eps):
     """
     Реалізує метод ділення навпіл.
-    Приймає математичну функцію як аргумент, межі [a, b] та точність eps.
+    Приймає функцію як аргумент, межі [a, b] та точність eps.
     Повертає: корінь, кількість ітерацій, список-протокол обчислень.
     """
+    # Перевірка, що функція має різні знаки на кінцях відрізка
     if func(a) * func(b) >= 0:
         raise ValueError("Функція повинна мати різні знаки на кінцях відрізка [a, b].")
+    
     iteration = 0
     protocol = []
 
@@ -48,15 +51,16 @@ def save_results_to_file(filename, root, iterations, protocol):
         f.write(f"Found root: x = {root:.6f}\n")
         f.write(f"Number of iterations: {iterations}\n")
         
-        # Table header
+        # Заголовки таблиці
         f.write(f"{'Iteration':<10} | {'a':<12} | {'b':<12} | {'c (midpoint)':<12} | {'f(c)':<15}\n")
         
-        # Table rows
+        # Ряди таблиці
         for item in protocol:
             it, a_val, b_val, c_val, fc_val = item
             f.write(f"{it:<10} | {a_val:<12.6f} | {b_val:<12.6f} | {c_val:<12.6f} | {fc_val:<15.2e}\n")
         
     print(f"Results saved to file: {filename}")
+    print(f"Повний шлях до файлу: {os.path.abspath(filename)}")
 
 def main():
     # Вхідні дані для Варіанту 4
@@ -83,3 +87,7 @@ def main():
         
     except ValueError as e:
         print(f"[Error]: {e}")
+
+
+main()
+
