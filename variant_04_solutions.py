@@ -24,7 +24,7 @@ def solve_bisection(func, a, b, eps):
     iteration = 0
     protocol = []
 
-    protocol.append((iteration, a, b, (a + b) / 2.0, func((a + b) / 2.0)))
+    protocol.append((iteration, a, b, (a + b) / 2, func((a + b) / 2)))
     while (b - a) > 2 * eps:
         iteration += 1
         c = (a + b) / 2
@@ -58,3 +58,28 @@ def save_results_to_file(filename, root, iterations, protocol):
         
     print(f"Results saved to file: {filename}")
 
+def main():
+    # Вхідні дані для Варіанту 4
+    a = 0.8
+    b = 1.0
+    eps = 0.00003
+    filename = "results_variant_04.txt"
+    
+    print("--- Solving the equation tan(x) - 1/x = 0 using the bisection method ---")
+    print(f"Interval: [{a}, {b}]")
+    print(f"Precision (eps): {eps}")
+    
+    try:
+        # Виклик числового методу
+        root, iterations, protocol = solve_bisection(target_function, a, b, eps)
+        
+        # Виведення результатів у консоль
+        print(f"\n[Success] Root found: x = {root:.6f}")
+        print(f"Number of iterations: {iterations}")
+        print(f"Function value at the root: f(x) = {target_function(root):.2e}")
+        
+        # Виклик функції збереження у файл
+        save_results_to_file(filename, root, iterations, protocol)
+        
+    except ValueError as e:
+        print(f"[Error]: {e}")
